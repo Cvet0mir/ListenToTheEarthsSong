@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="listentotheearthssong.client/listentotheearthssong.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="ListenToTheEarthsSong.Server/ListenToTheEarthsSong.Server.csproj" />
+  <Project Path="ListenToTheEarthsSong/ListenToTheEarthsSong.Data.csproj" />
+</Solution>
