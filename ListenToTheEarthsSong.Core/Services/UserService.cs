@@ -20,9 +20,17 @@ namespace ListenToTheEarthsSong.Core.Services
             _context = context;
         }
 
-        public Task<bool> AuthenticateUserAsync(string username, string password)
+        public async Task<bool> AuthenticateUserAsync(string username, string password)
         {
-            throw new NotImplementedException();
+            var checkUser = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            string hashPassword = PasswordHasher.ComputeSha256(password);
+
+            if (checkUser == null || checkUser.PasswordHash != hashPassword)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task CreateUserAsync(string username, string password, string email)
@@ -49,9 +57,18 @@ namespace ListenToTheEarthsSong.Core.Services
             
         }
 
-        public Task DeleteUserAsync(int Id)
+        public async Task DeleteUserAsync(int Id)
         {
-            throw new NotImplementedException();
+            var findUser = await _context.Users.FindAsync(Id);
+
+            if (findUser==null)
+            {
+                throw new InvalidOperationException("This user does not exist.");
+            }
+
+            _context.Users.Remove(findUser);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
