@@ -11,6 +11,6 @@ namespace ListenToTheEarthsSong.Core.Interfaces
     {
         Task CreatePhotoAsync(string ImgName, string ImgUrl, int UserId);
         Task DeletePhotoAsync(int Id);
-        Task<List<Photo>> GetAllPhotosAsync();
+        Task<List<Photo>> GetAllPhotosAsync(DateTime? sortByDate);
     }
 }
