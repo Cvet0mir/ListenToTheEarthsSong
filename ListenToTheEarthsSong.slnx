@@ -3,6 +3,7 @@
     <Build />
     <Deploy />
   </Project>
+  <Project Path="ListenToTheEarthsSong.Core/ListenToTheEarthsSong.Core.csproj" Id="4a4dbbf9-3d38-40a9-aaae-22c2ef099ff2" />
   <Project Path="ListenToTheEarthsSong.Server/ListenToTheEarthsSong.Server.csproj" />
   <Project Path="ListenToTheEarthsSong/ListenToTheEarthsSong.Data.csproj" />
 </Solution>
