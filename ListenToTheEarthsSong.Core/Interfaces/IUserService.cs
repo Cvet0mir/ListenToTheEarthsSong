@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ListenToTheEarthsSong.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace ListenToTheEarthsSong.Core.Interfaces
         Task CreateUserAsync(string username, string password, string email);
         Task<bool> AuthenticateUserAsync(string username, string password);
         Task DeleteUserAsync(int Id);
+        Task<User> GetUserAsync(int Id);
     }
 }

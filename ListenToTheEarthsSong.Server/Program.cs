@@ -1,4 +1,6 @@
 
+using ListenToTheEarthsSong.Core.Interfaces;
+using ListenToTheEarthsSong.Core.Services;
 using ListenToTheEarthsSong.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,9 @@ namespace ListenToTheEarthsSong.Server
 
             builder.Services.AddDbContext<EarthDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<IPhotosService,PhotoService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 

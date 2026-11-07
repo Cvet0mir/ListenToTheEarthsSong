@@ -70,5 +70,15 @@ namespace ListenToTheEarthsSong.Core.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> GetUserAsync(int Id)
+        {
+            var findUser = await _context.Users.FindAsync(Id);
+            if (findUser == null)
+            {
+                throw new InvalidOperationException("This user does not exist.");
+            }
+            return findUser;
+        }
     }
-}
+}  

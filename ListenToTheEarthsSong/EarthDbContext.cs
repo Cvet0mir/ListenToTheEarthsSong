@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ListenToTheEarthsSong.Data.Models;
+using ListenToTheEarthsSong.Data.Config;
 
 namespace ListenToTheEarthsSong.Data
 {
@@ -24,6 +25,9 @@ namespace ListenToTheEarthsSong.Data
                 .WithOne(p => p.UploadedBy)
                 .HasForeignKey(p => p.UploadedById)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.ApplyConfiguration(new UserConfig());
+            modelBuilder.ApplyConfiguration(new PhotoConfig());
         }
     }
 }
