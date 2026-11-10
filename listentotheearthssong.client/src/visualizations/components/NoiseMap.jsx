@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "../../shared/css/noiseMap.css";
 
 function parseNoiseValue(value) {
     if (value === null || value === undefined || value === "") {
@@ -94,14 +95,11 @@ function NoiseMap({ noiseData, year }) {
     };
 
     return (
-        <div>
+        <div className="noise-map-container">
             <MapContainer
                 center={[42.6977, 23.3219]}
                 zoom={12}
-                style={{
-                    height: "550px",
-                    width: "100%"
-                }}
+                className="noise-map"
             >
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
