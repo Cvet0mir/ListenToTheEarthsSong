@@ -9,7 +9,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\features\auth\NewFolder\" />
-    <Folder Include="src\shared\" />
+    <Folder Include="src\features\auth\components\" />
+    <Folder Include="src\features\auth\services\" />
   </ItemGroup>
 </Project>
