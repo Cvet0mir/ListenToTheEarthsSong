@@ -11,5 +11,6 @@
   <ItemGroup>
     <Folder Include="src\features\auth\components\" />
     <Folder Include="src\features\auth\services\" />
+    <Folder Include="src\shared\layouts\" />
   </ItemGroup>
 </Project>
