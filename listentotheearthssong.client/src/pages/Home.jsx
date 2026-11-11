@@ -287,7 +287,6 @@ function Home() {
                                     <NoisePollution />
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </section>
