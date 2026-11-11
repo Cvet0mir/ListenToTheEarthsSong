@@ -15,20 +15,20 @@ namespace ListenToTheEarthsSong.Data.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Името на изображението е задължително.")]
         public string ImgName { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "Линкът към изображението е задължителен.")]
         public string ImgUrl { get; set; } = null!;
 
-        [Required]
-        [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters.")]
+        [Required(ErrorMessage = "Описанието е задължително.")]
+        [StringLength(500, ErrorMessage = "Описанието не може да бъде по-дълго от 500 символа.")]
         public string Description { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "Датата на качване е задължителна.")]
         public DateTime UploadedAt { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Категорията е задължителна.")]
         public PhotoCategory Category { get; set; }
 
         public int UploadedById { get; set; }
