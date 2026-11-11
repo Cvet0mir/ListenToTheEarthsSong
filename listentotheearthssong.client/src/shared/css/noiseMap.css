@@ -1,0 +1,25 @@
+.noise-map-wrapper {
+    position: relative;
+    width: 100%;
+    z-index: 0;
+}
+
+.noise-map-container {
+    position: relative;
+    width: 100%;
+    height: 550px;
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 0;
+}
+
+.noise-map {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 0;
+}
+
+    .noise-map .leaflet-control-container {
+        z-index: 10;
+    }
