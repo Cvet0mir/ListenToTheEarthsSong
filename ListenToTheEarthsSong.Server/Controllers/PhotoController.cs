@@ -53,6 +53,10 @@ namespace ListenToTheEarthsSong.Server.Controllers
             }
             try
             {
+                if (!Uri.IsWellFormedUriString(ImgUrl, UriKind.Absolute))
+                {
+                    return BadRequest("Invalid image URL.");
+                }
                 await Service.CreatePhotoAsync(ImgName, ImgUrl, UserId);
                 return Ok("Photo created successfully.");
             }
