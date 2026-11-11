@@ -30,6 +30,14 @@ namespace ListenToTheEarthsSong.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("ImgName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +83,29 @@ namespace ListenToTheEarthsSong.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "milkoivan@gmail.com",
+                            PasswordHash = "1eae2a349582cb4beadd0c6a02bcf6a0e18c6e524a0c80a8ef16acdff232ab6c",
+                            Username = "Ivan Milev"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "maria.petrova@gmail.com",
+                            PasswordHash = "b07e99c422b344c835ddfad0084d1b05999388150e245515a3f93d3d97eae1fd",
+                            Username = "Maria Petrova"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "kirpetrov@gmail.com",
+                            PasswordHash = "673c2ec6801a14e46fc7367bf9f53bc638b231efcfe71aa8c153df2de9cb5895",
+                            Username = "Kircho Petrov"
+                        });
                 });
 
             modelBuilder.Entity("ListenToTheEarthsSong.Data.Models.Photo", b =>
