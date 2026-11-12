@@ -20,17 +20,23 @@ namespace ListenToTheEarthsSong.Core.Services
             _context = context;
         }
 
-        public async Task<bool> AuthenticateUserAsync(string username, string password)
+        public async Task<User?> AuthenticateUserAsync(string email, string password)
         {
-            var checkUser = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
-            string hashPassword = PasswordHasher.ComputeSha256(password);
+            var checkUser = await _context.Users
+                .FirstOrDefaultAsync(x => x.Email == email);
 
-            if (checkUser == null || checkUser.PasswordHash != hashPassword)
+            if (checkUser == null)
             {
-                return false;
+                return null;
             }
 
-            return true;
+            string hashPassword = PasswordHasher.ComputeSha256(password);
+            if (checkUser.PasswordHash != hashPassword)
+            {
+                return null;
+            }
+
+            return checkUser;
         }
 
         public async Task CreateUserAsync(string username, string password, string email)
@@ -46,7 +52,11 @@ namespace ListenToTheEarthsSong.Core.Services
                 throw new InvalidOperationException("Username already exists.");
             }
 
-           await _context.Users.AddAsync(new User
+            if (await userCheck.AnyAsync(x => x.Email == email))
+            {
+                throw new InvalidOperationException("Email already exists.");
+            }
+            await _context.Users.AddAsync(new User
             {
                 Username = username,
                 PasswordHash = hashPassword,

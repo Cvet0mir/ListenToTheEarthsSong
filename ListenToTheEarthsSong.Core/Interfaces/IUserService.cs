@@ -10,7 +10,7 @@ namespace ListenToTheEarthsSong.Core.Interfaces
     public interface IUserService
     {
         Task CreateUserAsync(string username, string password, string email);
-        Task<bool> AuthenticateUserAsync(string username, string password);
+        Task<User?> AuthenticateUserAsync(string email, string password);
         Task DeleteUserAsync(int Id);
         Task<User> GetUserAsync(int Id);
     }

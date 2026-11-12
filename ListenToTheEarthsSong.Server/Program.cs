@@ -2,6 +2,7 @@
 using ListenToTheEarthsSong.Core.Interfaces;
 using ListenToTheEarthsSong.Core.Services;
 using ListenToTheEarthsSong.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 namespace ListenToTheEarthsSong.Server
@@ -25,6 +26,33 @@ namespace ListenToTheEarthsSong.Server
             builder.Services.AddScoped<IPhotosService,PhotoService>();
             builder.Services.AddScoped<IUserService, UserService>();
 
+            builder.Services.AddAuthentication(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            )
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "EcoTishina.Auth";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+                options.SlidingExpiration = true;
+
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return Task.CompletedTask;
+                };
+            });
+            builder.Services.AddAuthorization();
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
@@ -39,8 +67,12 @@ namespace ListenToTheEarthsSong.Server
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseStaticFiles();
 
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -1,5 +1,8 @@
 ﻿using ListenToTheEarthsSong.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ListenToTheEarthsSong.Server.Controllers
 {
@@ -92,24 +95,80 @@ namespace ListenToTheEarthsSong.Server.Controllers
         }
 
 
-        public async Task<IActionResult> AuthenticateUser(string username, string password)
+        [HttpPost("AuthenticateUser")]
+        public async Task<IActionResult> AuthenticateUser(
+            [FromForm] string email,
+            [FromForm] string password)
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(password))
             {
-                return BadRequest("Username and password are required.");
+                return BadRequest("Имейлът и паролата са задължителни.");
             }
+
             try
             {
-                var isAuthenticated = await Service.AuthenticateUserAsync(username, password);
-                if (isAuthenticated)
-                    return Ok("User authenticated successfully.");
-                else
-                    return Unauthorized("Invalid username or password.");
+                var user = await Service.AuthenticateUserAsync(
+                    email.Trim(),
+                    password
+                );
+
+                if (user == null)
+                {
+                    return Unauthorized("Невалиден имейл адрес или парола.");
+                }
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Email, user.Email)
+                };
+
+                var identity = new ClaimsIdentity(
+                    claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme
+                );
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal
+                );
+
+                return Ok("Успешно влизане!");
             }
             catch (InvalidOperationException x)
             {
                 return BadRequest(x.Message);
             }
+        }
+
+
+        [HttpGet("GetCurrentUser")]
+        public IActionResult GetCurrentUser()
+        {
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new
+            {
+                username = User.Identity.Name,
+                email = User.FindFirst(ClaimTypes.Email)?.Value
+            });
+        }
+
+
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            return Ok("Успешно излизане!");
         }
     }
 }
