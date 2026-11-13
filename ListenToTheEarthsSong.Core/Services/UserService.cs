@@ -47,10 +47,6 @@ namespace ListenToTheEarthsSong.Core.Services
                 throw new InvalidOperationException("Username already exists.");
             }
             var hashPassword = PasswordHasher.ComputeSha256(password);
-            if (await userCheck.AnyAsync(x=>x.PasswordHash == hashPassword))
-            {
-                throw new InvalidOperationException("Username already exists.");
-            }
 
             if (await userCheck.AnyAsync(x => x.Email == email))
             {
