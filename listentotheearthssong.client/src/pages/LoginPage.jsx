@@ -64,7 +64,9 @@ function Login() {
             }
 
             alert("Успешно влизане! Добре дошъл отново в ЕкоТишина!");
+            window.dispatchEvent(new Event("auth-changed"));
             navigate("/");
+
         } catch (error) {
             console.error("Login error:", error);
             setServerMessage(
@@ -160,24 +162,6 @@ function Login() {
                             </label>
 
                             <div className="field">
-                                <svg
-                                    className="field-icon"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
-                                    aria-hidden="true"
-                                >
-                                    <rect
-                                        x="3"
-                                        y="5"
-                                        width="18"
-                                        height="14"
-                                        rx="2"
-                                    />
-                                    <path d="m3 7 9 6 9-6" />
-                                </svg>
-
                                 <input
                                     className="form-control"
                                     id="email"
@@ -199,24 +183,6 @@ function Login() {
                             </label>
 
                             <div className="field field-password">
-                                <svg
-                                    className="field-icon"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
-                                    aria-hidden="true"
-                                >
-                                    <rect
-                                        x="5"
-                                        y="10"
-                                        width="14"
-                                        height="11"
-                                        rx="2"
-                                    />
-                                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                                </svg>
-
                                 <input
                                     className="form-control"
                                     id="password"

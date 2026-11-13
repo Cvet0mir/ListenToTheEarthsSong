@@ -78,8 +78,8 @@ const Register = () => {
                 );
             }
 
-            alert("Регистрацията беше успешна! Добре дошъл в ЕкоТишина!");
-            navigate("/");
+            alert("Регистрацията беше успешна! Добре дошъл в ЕкоТишина! Сега можеш да влезеш в новия си профил.");
+            navigate("/login");
 
         } catch (error) {
             setServerMessage(error.message);
@@ -185,18 +185,6 @@ const Register = () => {
                             </label>
 
                             <div className="field">
-
-                                <svg
-                                    className="field-icon"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.8"
-                                    aria-hidden="true"
-                                >
-                                    <circle cx="12" cy="8" r="4" />
-                                    <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
-                                </svg>
 
                                 <input
                                     className={`form-control ${errors.username ? "is-invalid" : ""}`}
