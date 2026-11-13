@@ -1,0 +1,136 @@
+.logout-nav-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    padding: 0.5rem;
+}
+
+
+.logout-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(15, 35, 25, 0.55);
+    backdrop-filter: blur(5px);
+    padding: 20px;
+}
+
+
+.logout-modal {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 35px 30px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: logoutModalAppear 0.2s ease-out;
+}
+
+
+.logout-modal-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f5ec;
+    border-radius: 50%;
+    font-size: 30px;
+}
+
+
+.logout-modal h2 {
+    font-size: 23px;
+    font-weight: 700;
+    color: #234b35;
+    margin-bottom: 12px;
+}
+
+.logout-modal p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #68766d;
+    margin-bottom: 28px;
+}
+
+
+.logout-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+    .logout-modal-actions button {
+        flex: 1;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+.logout-cancel-btn {
+    background: #edf2ee;
+    color: #345642;
+}
+
+    .logout-cancel-btn:hover {
+        background: #dfe9e2;
+    }
+
+.logout-confirm-btn {
+    background: #b94b4b;
+    color: white;
+}
+
+    .logout-confirm-btn:hover {
+        background: #a33c3c;
+    }
+
+.logout-modal-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+.logout-error {
+    background: #fff0f0;
+    color: #a33c3c;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+
+@keyframes logoutModalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+
+@media (max-width: 480px) {
+    .logout-modal {
+        padding: 28px 20px;
+    }
+
+        .logout-modal h2 {
+            font-size: 21px;
+        }
+}
