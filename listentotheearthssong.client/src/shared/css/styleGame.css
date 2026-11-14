@@ -365,3 +365,124 @@
         transition: none;
     }
 }
+
+/* V3: clear, always-visible progress meter */
+.eco-game__score {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: min(100%,330px);
+    padding: 12px 16px;
+    border-radius: 22px;
+}
+
+.eco-game__score-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(13px,1.7vw,17px);
+}
+
+    .eco-game__score-top strong {
+        min-width: 65px;
+        padding: 3px 11px;
+        font-size: 20px;
+    }
+
+.eco-game__meter {
+    position: relative;
+    height: 15px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: #dbe5e9;
+    border: 2px solid #b2cbd8;
+    box-shadow: inset 0 2px 3px #536b7a25;
+}
+
+.eco-game__meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg,#48d283,#20a966);
+    border-radius: inherit;
+    transition: width .4s ease;
+}
+
+.eco-game__score small {
+    font-size: 12px;
+    font-weight: 700;
+    color: #536f7b;
+}
+/* V3: original illustrated child, not a platform-dependent emoji */
+.eco-game__player {
+    width: clamp(32px,5.5vw,66px);
+    font-size: initial;
+    transform: translate(-50%,-88%);
+    transition: left 42ms linear,top 42ms linear;
+    filter: drop-shadow(0 3px 2px #152b3775);
+}
+
+.eco-game__player-facing {
+    width: 100%;
+    transform-origin: center;
+    transition: transform .12s ease;
+}
+
+.eco-game__player-facing--left {
+    transform: scaleX(-1);
+}
+
+.eco-game__character {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.eco-game__character--walking .eco-game__character-legs {
+    transform-origin: 37px 74px;
+    animation: eco-character-step .24s ease-in-out infinite alternate;
+}
+
+@keyframes eco-character-step {
+    to {
+        transform: rotate(-9deg);
+    }
+}
+
+.eco-game__board {
+    background: #a9df55;
+    box-shadow: 0 0 0 2px #d6eabb,0 16px 36px #183d3733;
+}
+
+.eco-game__pin-icon {
+    box-shadow: 0 2px 7px #bc2c43aa;
+}
+
+.eco-game__message {
+    background: linear-gradient(115deg,#f3fff0,#e7f5eb);
+}
+
+@media(max-width:650px) {
+    .eco-game__score {
+        width: 100%;
+    }
+
+    .eco-game__header {
+        align-items: stretch;
+    }
+
+    .eco-game__player {
+        width: clamp(22px,6vw,36px);
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .eco-game__meter-fill, .eco-game__player-facing {
+        transition: none;
+    }
+
+    .eco-game__character--walking .eco-game__character-legs {
+        animation: none;
+    }
+}
