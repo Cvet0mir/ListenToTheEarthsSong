@@ -85,6 +85,14 @@ function Navbar() {
                                 </li>
                             )}
 
+                            {!loading && user && (
+                                <li className="nav-item">
+                                    <Link className="nav-link text-dark" to="/demonstrations">
+                                        Демонстрации
+                                    </Link>
+                                </li>
+                            )}
+
                             {!loading && !user && (
                                 <>
                                     <li className="nav-item">

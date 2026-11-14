@@ -236,51 +236,148 @@ export default function Gallery() {
                 </section>
             </main>
 
-            <div className="modal fade" id="uploadModal" tabIndex={-1} aria-labelledby="uploadModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-                    <div className="modal-content">
+            <div
+                className="modal fade"
+                id="uploadModal"
+                tabIndex={-1}
+                aria-labelledby="uploadModalLabel"
+                aria-hidden="true"
+            >
+                <div className="modal-dialog modal-dialog-centered modal-lg upload-dialog">
+                    <div className="modal-content upload-content">
                         <div className="modal-header">
-                            <h2 className="modal-title fs-5" id="uploadModalLabel">📷 Качи своя снимка</h2>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Затвори" />
+                            <h2 className="modal-title fs-5" id="uploadModalLabel">
+                                📷 Качи своя снимка
+                            </h2>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Затвори"
+                            />
                         </div>
-                        <form encType="multipart/form-data" onSubmit={handleUpload}>
-                            <div className="modal-body p-4">
+
+                        <form
+                            encType="multipart/form-data"
+                            onSubmit={handleUpload}
+                            className="upload-form"
+                        >
+                            <div className="modal-body upload-body p-4">
+
                                 <div className="drop-zone mb-4">
                                     <div className="fs-2" aria-hidden="true">🖼️</div>
-                                    <label htmlFor="photoFile" className="form-label fw-bold">Избери снимка</label>
-                                    <input type="file" className="form-control" id="photoFile" name="photo"
-                                        accept="image/jpeg,image/png,image/webp" required
-                                        onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)} />
-                                    <div className="form-text">JPG, PNG или WebP. Размерът и съдържанието се проверяват и на сървъра.</div>
-                                    {previewUrl && <img id="uploadPreview" className="mt-3" src={previewUrl} alt="Преглед на избраната снимка" />}
+
+                                    <label htmlFor="photoFile" className="form-label fw-bold">
+                                        Избери снимка
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        id="photoFile"
+                                        name="photo"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        required
+                                        onChange={(event) =>
+                                            setPhotoFile(event.target.files?.[0] ?? null)
+                                        }
+                                    />
+
+                                    <div className="form-text">
+                                        JPG, PNG или WebP. Размерът и съдържанието се проверяват и на сървъра.
+                                    </div>
+
+                                    {previewUrl && (
+                                        <img
+                                            id="uploadPreview"
+                                            className="mt-3"
+                                            src={previewUrl}
+                                            alt="Преглед на избраната снимка"
+                                        />
+                                    )}
                                 </div>
+
                                 <div className="mb-3">
-                                    <label htmlFor="photoTitle" className="form-label fw-semibold">Заглавие</label>
-                                    <input className="form-control" id="photoTitle" name="title" maxLength={100}
-                                        placeholder="Например: Тишина в гората" required />
+                                    <label htmlFor="photoTitle" className="form-label fw-semibold">
+                                        Заглавие
+                                    </label>
+                                    <input
+                                        className="form-control"
+                                        id="photoTitle"
+                                        name="title"
+                                        maxLength={100}
+                                        placeholder="Например: Тишина в гората"
+                                        required
+                                    />
                                 </div>
+
                                 <div className="mb-3">
-                                    <label htmlFor="photoDescription" className="form-label fw-semibold">Описание</label>
-                                    <textarea className="form-control" id="photoDescription" name="description" rows={3}
-                                        maxLength={500} required placeholder="Разкажи историята зад снимката..." />
+                                    <label htmlFor="photoDescription" className="form-label fw-semibold">
+                                        Описание
+                                    </label>
+                                    <textarea
+                                        className="form-control"
+                                        id="photoDescription"
+                                        name="description"
+                                        rows={3}
+                                        maxLength={500}
+                                        required
+                                        placeholder="Разкажи историята зад снимката..."
+                                    />
                                 </div>
+
                                 <div className="row g-3">
                                     <div className="col-sm-6">
-                                        <label htmlFor="photoCategory" className="form-label fw-semibold">Категория</label>
-                                        <select id="photoCategory" name="category" className="form-select" required defaultValue="">
-                                            <option value="" disabled>Избери категория</option>
+                                        <label htmlFor="photoCategory" className="form-label fw-semibold">
+                                            Категория
+                                        </label>
+                                        <select
+                                            id="photoCategory"
+                                            name="category"
+                                            className="form-select"
+                                            required
+                                            defaultValue=""
+                                        >
+                                            <option value="" disabled>
+                                                Избери категория
+                                            </option>
+
                                             {categoryNames.map((name) => (
-                                                <option key={name} value={name}>{labelForCategory(name)}</option>
+                                                <option key={name} value={name}>
+                                                    {labelForCategory(name)}
+                                                </option>
                                             ))}
                                         </select>
                                     </div>
                                 </div>
-                                <p className="small text-secondary mt-3 mb-0">Качвай само снимки, които имаш право да споделяш. Не публикувай лични данни или снимки на други хора без необходимото разрешение.</p>
-                                {uploadNotice && <div className="alert alert-info mt-3 mb-0" role="status">{uploadNotice}</div>}
+
+                                <p className="small text-secondary mt-3 mb-0">
+                                    Качвай само снимки, които имаш право да споделяш.
+                                    Не публикувай лични данни или снимки на други хора
+                                    без необходимото разрешение.
+                                </p>
+
+                                {uploadNotice && (
+                                    <div className="alert alert-info mt-3 mb-0" role="status">
+                                        {uploadNotice}
+                                    </div>
+                                )}
                             </div>
-                            <div className="modal-footer">
-                                <button className="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Отказ</button>
-                                <button className="btn btn-forest px-4" type="submit" disabled={uploading}>
+
+                            <div className="modal-footer upload-footer">
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    type="button"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Отказ
+                                </button>
+
+                                <button
+                                    className="btn btn-forest px-4"
+                                    type="submit"
+                                    disabled={uploading}
+                                >
                                     {uploading ? "Публикуване..." : "Публикувай снимката"}
                                 </button>
                             </div>
