@@ -3,11 +3,16 @@ import "../shared/css/styleGame.css";
 
 // Coordinates below are percentages of the illustrated game board.
 const START = { x: 49, y: 53.5 };
-const SPEED = 17; // percentage points per second on the illustrated board
-const ROAD_RADIUS = 3.1; // playable corridor half-width (percentage units)
+// All collisions and movement use the SVG viewBox (1000 × 680), not percentages.
+const WORLD_W = 1000;
+const WORLD_H = 680;
+const MAX_SPEED = 165; // SVG pixels per second
+const RESPONSE = 18; // higher = less input lag
+const ROAD_RADIUS = 37; // painted roads are ~79px wide
+const REACH = 64; // comfortable distance from a noise problem
 const PROBLEMS = [
     { id: "school", x: 25, y: 53.5, icon: "🚌", title: "Шумен трафик до училището", text: "Отивай пеша, с колело или с обществен транспорт, когато е възможно.", fixed: "🚲" },
-    { id: "park", x: 54, y: 53.5, icon: "🎵", title: "Силна музика в парка", text: "Намали музиката, за да могат всички да се наслаждават на парка.", fixed: "🌼" },
+    { id: "park", x: 50, y: 24.2, icon: "🎵", title: "Силна музика в парка", text: "Намали музиката, за да могат всички да се наслаждават на парка.", fixed: "🌼" },
     { id: "hospital", x: 81, y: 53.5, icon: "🚑", title: "Шум близо до болницата", text: "Не натискай клаксона без нужда и пази тишина край болниците.", fixed: "💚" },
     { id: "construction", x: 23, y: 87, icon: "🚧", title: "Шум от строителство", text: "Извършвай шумните строителни дейности в разрешените дневни часове.", fixed: "🌱" },
     { id: "neighborhood", x: 75, y: 87, icon: "🚗", title: "Шум в квартала", text: "Карай спокойно, избягвай излишното форсиране и натискане на клаксона.", fixed: "🌳" },
@@ -57,19 +62,46 @@ function NoiseDetail({ x, y, type }) {
     </g>;
 }
 
-// Point-to-segment distance lets the player follow the actual road centerlines,
-// including corners, instead of walking through rectangular grass areas.
+// These centerlines follow the actual curves drawn in CityIllustration.
+// Sampling the quadratic curves gives accurate collisions all the way around corners.
+function traceRoad(commands) {
+    const pts = [];
+    let at = [0, 0];
+    for (const cmd of commands) {
+        if (cmd[0] === "M") { at = [cmd[1], cmd[2]]; pts.push(at); }
+        if (cmd[0] === "L") { at = [cmd[1], cmd[2]]; pts.push(at); }
+        if (cmd[0] === "Q") {
+            const p = at, control = [cmd[1], cmd[2]], end = [cmd[3], cmd[4]];
+            for (let i = 1; i <= 12; i++) {
+                const t = i / 12, u = 1 - t;
+                pts.push([u * u * p[0] + 2 * u * t * control[0] + t * t * end[0], u * u * p[1] + 2 * u * t * control[1] + t * t * end[1]]);
+            }
+            at = end;
+        }
+    }
+    return pts.slice(1).map((point, i) => [pts[i], point]);
+}
 const ROAD_SEGMENTS = [
-    [[8, 54.1], [92, 54.1]], [[6.2, 56.5], [6.2, 82.8]], [[6.2, 82.8], [8.8, 87.9]],
-    [[8.8, 87.9], [90.2, 87.9]], [[90.2, 87.9], [94.1, 83.0]], [[94.1, 83.0], [94.1, 58.8]],
-    [[35.8, 54.1], [34.3, 48.9]], [[34.3, 48.9], [34.3, 30]],
-    [[34.3, 30], [37.4, 24.1]], [[37.4, 24.1], [61.4, 24.1]],
-    [[61.4, 24.1], [65.7, 30]], [[65.7, 30], [65.7, 48.7]], [[65.7, 48.7], [63.3, 54.1]],
+    ...traceRoad([["M", 80, 368], ["L", 920, 368], ["Q", 941, 368, 941, 400], ["L", 941, 562],
+    ["Q", 941, 598, 902, 598], ["L", 99, 598], ["Q", 62, 598, 62, 562],
+    ["L", 62, 404], ["Q", 62, 368, 80, 368]]),
+    ...traceRoad([["M", 358, 367], ["Q", 343, 367, 343, 336], ["L", 343, 204],
+    ["Q", 343, 165, 388, 165], ["L", 614, 165], ["Q", 657, 165, 657, 205],
+    ["L", 657, 330], ["Q", 657, 366, 633, 366]]),
 ];
 function distanceToSegment(x, y, a, b) {
     const dx = b[0] - a[0], dy = b[1] - a[1];
-    const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / (dx * dx + dy * dy)));
+    const lengthSq = dx * dx + dy * dy;
+    const t = lengthSq === 0 ? 0 : Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / lengthSq));
     return Math.hypot(x - a[0] - t * dx, y - a[1] - t * dy);
+}
+function isOnRoad(x, y) {
+    return x >= 16 && x <= 986 && y >= 124 && y <= 647 &&
+        ROAD_SEGMENTS.some(([a, b]) => distanceToSegment(x, y, a, b) <= ROAD_RADIUS);
+}
+function worldPoint(percent) { return { x: percent.x * WORLD_W / 100, y: percent.y * WORLD_H / 100 }; }
+function distanceToProblem(position, problem) {
+    return Math.hypot(position.x - problem.x * WORLD_W / 100, position.y - problem.y * WORLD_H / 100);
 }
 
 function Tree({ x, y, s = 1 }) {
@@ -173,82 +205,121 @@ function CityIllustration() {
         <Tree x={35} y={211} s={.72} /><Tree x={298} y={255} s={.7} /><Tree x={711} y={246} s={.72} /><Tree x={967} y={215} s={.78} />
         <Tree x={399} y={287} s={.7} /><Tree x={578} y={283} s={.67} /><Tree x={558} y={475} s={.6} /><Tree x={930} y={481} s={.55} />
         <g fontSize="24">{[[115, 453], [396, 490], [543, 130], [976, 315], [510, 649], [351, 645], [884, 163]].map(([x, y], i) => <text key={i} x={x} y={y}>{["🌻", "🌷", "🌼", "🌿", "🌸", "🌿", "🌼"][i]}</text>)}</g>
+        {/* V4 environment: traffic calming, road signs and tiny park details. */}
+        <g fontFamily="Arial, sans-serif" textAnchor="middle">
+            <g transform="translate(500 122)"><rect x="-62" y="-24" width="124" height="27" rx="12" fill="#eaffdd" stroke="#528f4d" strokeWidth="3" /><text y="-6" fontWeight="bold" fontSize="14" fill="#286b45">ТИХА ЗОНА</text><path d="M0 4 V27" stroke="#5d7652" strokeWidth="5" /></g>
+            <g transform="translate(812 308)"><path d="M0 0 V49" stroke="#54746d" strokeWidth="5" /><rect x="-39" y="-30" width="79" height="31" rx="5" fill="#fff" stroke="#507eaa" strokeWidth="4" /><text x="0" y="-10" fontSize="12" fontWeight="bold" fill="#31537f">БОЛНИЦА</text></g>
+            <g transform="translate(110 480)"><rect x="-35" y="-21" width="69" height="31" rx="6" fill="#fff5d7" stroke="#6a885a" strokeWidth="3" /><text y="-2" fontSize="12" fontWeight="bold" fill="#44723f">30 km/h</text><path d="M0 12 V40" stroke="#6a885a" strokeWidth="4" /></g>
+        </g>
+        <g stroke="#fff" strokeWidth="7" opacity=".9" strokeLinecap="round"><path d="M248 343 v44 M260 343 v44 M272 343 v44 M284 343 v44" /><path d="M750 343 v44 M762 343 v44 M774 343 v44 M786 343 v44" /></g>
+        <g fill="#fef6bd" stroke="#b3a872" strokeWidth="2">
+            <circle cx="427" cy="244" r="5" /><circle cx="576" cy="245" r="5" /><circle cx="879" cy="527" r="5" />
+        </g>
+        <g fill="none" stroke="#4c9f39" strokeWidth="3" strokeLinecap="round">
+            <path d="M720 182 q-8 -16 -17 -10 M720 182 q10 -18 21 -14 M720 182 v11" />
+            <path d="M675 479 q-7 -13 -15 -8 M675 479 q10 -18 19 -10 M675 479 v15" />
+            <path d="M92 637 q-8 -15 -18 -8 M92 637 q8 -16 17 -9 M92 637 v10" />
+        </g>
+        <g stroke="#fff" strokeWidth="3" strokeLinecap="round" fill="none" opacity=".8"><path d="M155 86 q10 -9 20 0 q10 -9 20 0" /><path d="M708 64 q8 -7 16 0 q8 -7 16 0" /></g>
         <path d="M454 393 l13 -10 -13 -9 M480 393 l13 -10 -13 -9 M506 393 l13 -10 -13 -9" fill="none" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" opacity=".9" />
     </svg>;
 }
 
-function isOnRoad(x, y) {
-    return x >= 2 && x <= 98 && y >= 18 && y <= 95 &&
-        ROAD_SEGMENTS.some(([a, b]) => distanceToSegment(x, y, a, b) <= ROAD_RADIUS);
-}
-
 export default function Game() {
-    const [player, setPlayer] = useState(START);
+    // Keep animation coordinates in refs so key input never waits for a React render.
+    const [player, setPlayer] = useState(worldPoint(START));
     const [solved, setSolved] = useState([]);
     const [facing, setFacing] = useState("right");
     const [walking, setWalking] = useState(false);
     const [notice, setNotice] = useState("Открий червените знаци за шум по улиците!");
     const heldKeys = useRef(new Set());
-    const playerRef = useRef(START);
+    const touchKeys = useRef(new Set());
+    const playerRef = useRef(worldPoint(START));
+    const velocityRef = useRef({ x: 0, y: 0 });
+    const solvedRef = useRef([]);
+    solvedRef.current = solved;
     const completed = solved.length === PROBLEMS.length;
     const remaining = PROBLEMS.length - solved.length;
-    const nearby = PROBLEMS.find(p => !solved.includes(p.id) && Math.hypot(p.x - player.x, p.y - player.y) <= 6.3);
+    const nearby = PROBLEMS.find(p => !solved.includes(p.id) && distanceToProblem(player, p) <= REACH);
 
-    const moveBy = useCallback((dx, dy, amount) => {
+    const moveBy = useCallback((dx, dy) => {
         const current = playerRef.current;
-        const length = Math.hypot(dx, dy) || 1;
-        const vx = dx / length * amount, vy = dy / length * amount;
-        // Sliding along a road edge makes cornering noticeably more forgiving.
-        let next = { x: current.x + vx, y: current.y + vy };
-        if (!isOnRoad(next.x, next.y)) {
-            if (isOnRoad(current.x + vx, current.y)) next = { x: current.x + vx, y: current.y };
-            else if (isOnRoad(current.x, current.y + vy)) next = { x: current.x, y: current.y + vy };
-            else return;
+        // Several short collision checks avoid tunneling through road edges.
+        const steps = Math.max(1, Math.ceil(Math.hypot(dx, dy) / 5));
+        let next = { ...current };
+        for (let i = 0; i < steps; i++) {
+            const sx = dx / steps, sy = dy / steps;
+            if (isOnRoad(next.x + sx, next.y + sy)) {
+                next = { x: next.x + sx, y: next.y + sy };
+            } else if (isOnRoad(next.x + sx, next.y)) {
+                next = { x: next.x + sx, y: next.y };
+            } else if (isOnRoad(next.x, next.y + sy)) {
+                next = { x: next.x, y: next.y + sy };
+            }
         }
-        playerRef.current = next;
-        setPlayer(next);
-        if (dx !== 0) setFacing(dx < 0 ? "left" : "right");
+        if (Math.abs(next.x - current.x) + Math.abs(next.y - current.y) > 0.005) {
+            playerRef.current = next;
+            setPlayer(next);
+        }
     }, []);
-    const nudge = useCallback((dx, dy) => { moveBy(dx, dy, 1.65); setWalking(true); }, [moveBy]);
     const solve = useCallback(() => {
         const at = playerRef.current;
-        const found = PROBLEMS.find(p => !solved.includes(p.id) && Math.hypot(p.x - at.x, p.y - at.y) <= 6.3);
+        const found = PROBLEMS.find(p => !solvedRef.current.includes(p.id) && distanceToProblem(at, p) <= REACH);
         if (!found) return;
         setSolved(before => before.includes(found.id) ? before : [...before, found.id]);
         setNotice(`✅ ${found.text}`);
-    }, [solved]);
-    const restart = () => { heldKeys.current.clear(); playerRef.current = START; setPlayer(START); setSolved([]); setFacing("right"); setWalking(false); setNotice("Открий червените знаци за шум по улиците!"); };
+    }, []);
+    const restart = () => {
+        heldKeys.current.clear(); touchKeys.current.clear(); velocityRef.current = { x: 0, y: 0 };
+        playerRef.current = worldPoint(START); setPlayer(worldPoint(START));
+        setSolved([]); setFacing("right"); setWalking(false);
+        setNotice("Открий червените знаци за шум по улиците!");
+    };
+    const touchDown = (key, event) => { event.preventDefault(); touchKeys.current.add(key); event.currentTarget.setPointerCapture(event.pointerId); };
+    const touchUp = (key) => { touchKeys.current.delete(key); };
 
     useEffect(() => {
         const keys = heldKeys.current;
+        const controls = touchKeys.current;
         const directions = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] };
         function editable(target) { return target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)); }
         function down(event) {
             if (editable(event.target)) return;
             const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
             if (directions[key]) { event.preventDefault(); keys.add(key); }
-            if (event.code === "Space" || event.key === "Enter") { if (event.target instanceof HTMLButtonElement) return; event.preventDefault(); solve(); }
+            if (event.code === "Space" || event.key === "Enter") { if (event.target instanceof HTMLButtonElement) return; event.preventDefault(); if (!event.repeat) solve(); }
         }
         function up(event) { const key = event.key.length === 1 ? event.key.toLowerCase() : event.key; keys.delete(key); }
-        function blur() { keys.clear(); setWalking(false); }
+        function blur() { keys.clear(); controls.clear(); velocityRef.current = { x: 0, y: 0 }; setWalking(false); }
         window.addEventListener("keydown", down);
         window.addEventListener("keyup", up);
         window.addEventListener("blur", blur);
         let animationId, lastTime;
         function frame(time) {
             if (lastTime !== undefined) {
-                const dt = Math.min((time - lastTime) / 1000, .05);
+                const dt = Math.min((time - lastTime) / 1000, .04);
                 let dx = 0, dy = 0;
-                for (const key of keys) { if (directions[key]) { dx += directions[key][0]; dy += directions[key][1]; } }
-                const active = dx !== 0 || dy !== 0;
-                if (active) moveBy(dx, dy, SPEED * dt);
-                setWalking(previous => previous === active ? previous : active);
+                for (const key of [...keys, ...controls]) {
+                    if (directions[key]) { dx += directions[key][0]; dy += directions[key][1]; }
+                }
+                const len = Math.hypot(dx, dy);
+                if (len > 0) { dx /= len; dy /= len; }
+                const targetX = dx * MAX_SPEED, targetY = dy * MAX_SPEED;
+                const blend = 1 - Math.exp(-RESPONSE * dt);
+                const v = velocityRef.current;
+                v.x += (targetX - v.x) * blend;
+                v.y += (targetY - v.y) * blend;
+                if (len === 0 && Math.hypot(v.x, v.y) < 1) { v.x = 0; v.y = 0; }
+                if (v.x !== 0 || v.y !== 0) moveBy(v.x * dt, v.y * dt);
+                const active = len > 0 && Math.hypot(v.x, v.y) > 5;
+                setWalking(prev => prev === active ? prev : active);
+                if (Math.abs(v.x) > 12) setFacing(prev => prev === (v.x < 0 ? "left" : "right") ? prev : (v.x < 0 ? "left" : "right"));
             }
             lastTime = time;
             animationId = requestAnimationFrame(frame);
         }
         animationId = requestAnimationFrame(frame);
-        return () => { cancelAnimationFrame(animationId); keys.clear(); window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); window.removeEventListener("blur", blur); };
+        return () => { cancelAnimationFrame(animationId); keys.clear(); controls.clear(); window.removeEventListener("keydown", down); window.removeEventListener("keyup", up); window.removeEventListener("blur", blur); };
     }, [moveBy, solve]);
 
     return <section className="eco-game">
@@ -271,7 +342,7 @@ export default function Game() {
                     <span className="eco-game__pin-emoji" aria-hidden="true">{fixed ? p.fixed : p.icon}</span>
                 </div>;
             })}
-            <div className="eco-game__player" style={{ left: `${player.x}%`, top: `${player.y}%` }}>
+            <div className="eco-game__player" style={{ left: `${player.x / WORLD_W * 100}%`, top: `${player.y / WORLD_H * 100}%` }}>
                 <div className={`eco-game__player-facing ${facing === "left" ? "eco-game__player-facing--left" : ""}`}><Character moving={walking} /></div>
             </div>
             {completed && <div className="eco-game__win" role="status"><span>🏆</span><strong>Браво! Градът е по-тих!</strong><p>Реши всички пет проблема с шумовото замърсяване.</p><button type="button" onClick={restart}>Играй отново ↻</button></div>}
@@ -283,10 +354,10 @@ export default function Game() {
         </div>
         <div className="eco-game__controls"><p><strong>Движение:</strong> задръж стрелките или WASD · <strong>Решаване:</strong> Space · Приближи се до червен знак 🔴</p>
             <div className="eco-game__dpad" aria-label="Бутони за движение">
-                <button className="up" type="button" onClick={() => nudge(0, -1)} aria-label="Нагоре">↑</button>
-                <button className="left" type="button" onClick={() => nudge(-1, 0)} aria-label="Наляво">←</button>
-                <button className="down" type="button" onClick={() => nudge(0, 1)} aria-label="Надолу">↓</button>
-                <button className="right" type="button" onClick={() => nudge(1, 0)} aria-label="Надясно">→</button>
+                <button className="up" type="button" onPointerDown={e => touchDown("ArrowUp", e)} onPointerUp={() => touchUp("ArrowUp")} onPointerCancel={() => touchUp("ArrowUp")} onLostPointerCapture={() => touchUp("ArrowUp")} aria-label="Нагоре">↑</button>
+                <button className="left" type="button" onPointerDown={e => touchDown("ArrowLeft", e)} onPointerUp={() => touchUp("ArrowLeft")} onPointerCancel={() => touchUp("ArrowLeft")} onLostPointerCapture={() => touchUp("ArrowLeft")} aria-label="Наляво">←</button>
+                <button className="down" type="button" onPointerDown={e => touchDown("ArrowDown", e)} onPointerUp={() => touchUp("ArrowDown")} onPointerCancel={() => touchUp("ArrowDown")} onLostPointerCapture={() => touchUp("ArrowDown")} aria-label="Надолу">↓</button>
+                <button className="right" type="button" onPointerDown={e => touchDown("ArrowRight", e)} onPointerUp={() => touchUp("ArrowRight")} onPointerCancel={() => touchUp("ArrowRight")} onLostPointerCapture={() => touchUp("ArrowRight")} aria-label="Надясно">→</button>
             </div>
         </div>
     </section>;

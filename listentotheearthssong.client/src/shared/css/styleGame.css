@@ -486,3 +486,49 @@
         animation: none;
     }
 }
+
+/* V4: position updates now come directly from the animation frame.
+   A second CSS position transition caused visible skipping and delayed stops. */
+.eco-game__player {
+    transition: none;
+    will-change: left, top;
+}
+
+.eco-game__dpad button {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+    .eco-game__dpad button:active {
+        background: #9fe0a0;
+        box-shadow: inset 0 2px 5px #437d5060;
+    }
+
+.eco-game__pin {
+    filter: drop-shadow(0 3px 3px #24323b66);
+}
+
+.eco-game__board {
+    border-color: #f7ffdf;
+}
+
+.eco-game__character--walking {
+    animation: eco-walk-bob .28s ease-in-out infinite alternate;
+}
+
+@keyframes eco-walk-bob {
+    from {
+        translate: 0 0;
+    }
+
+    to {
+        translate: 0 -2px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .eco-game__character--walking {
+        animation: none;
+    }
+}
