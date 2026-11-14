@@ -1,3 +1,4 @@
+import { apiUrl } from "../api/api.js";
 
 import { useEffect, useState, useCallback } from "react";
 
@@ -9,8 +10,8 @@ function useAuth() {
         setLoading(true);
 
         try {
-            const response = await fetch("/User/GetCurrentUser", {
-                credentials: "same-origin",
+            const response = await fetch(apiUrl("/User/GetCurrentUser"), {
+                credentials: "include",
                 signal
             });
 

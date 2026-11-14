@@ -1,3 +1,4 @@
+import { apiUrl } from "../api/api.js";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -62,12 +63,13 @@ const Register = () => {
             params.append("email", formData.email.trim());
             params.append("password", formData.password);
 
-            const response = await fetch("/User/CreateUser", {
+            const response = await fetch(apiUrl("/User/CreateUser"), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: params.toString()
+                body: params.toString(),
+                credentials: "include"
             });
 
             const result = await response.text();

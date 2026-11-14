@@ -1,3 +1,4 @@
+import { apiUrl } from "../../api/api.js";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -19,9 +20,9 @@ function Navbar() {
             setIsLoggingOut(true);
             setLogoutError("");
 
-            const response = await fetch("/User/Logout", {
+            const response = await fetch(apiUrl("/User/Logout"), {
                 method: "POST",
-                credentials: "same-origin"
+                credentials: "include"
             });
 
             if (!response.ok) {

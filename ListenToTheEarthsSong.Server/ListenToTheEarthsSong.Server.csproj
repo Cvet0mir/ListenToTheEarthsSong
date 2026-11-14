@@ -10,9 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
-      <Version>8.*-*</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.33" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.33">
       <PrivateAssets>all</PrivateAssets>
@@ -22,10 +19,16 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(RenderBuild)' != 'true'">
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>8.*-*</Version>
+    </PackageReference>
     <ProjectReference Include="..\listentotheearthssong.client\listentotheearthssong.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ListenToTheEarthsSong.Core\ListenToTheEarthsSong.Core.csproj" />
   </ItemGroup>
 

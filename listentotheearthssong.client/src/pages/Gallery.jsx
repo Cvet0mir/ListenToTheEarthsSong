@@ -1,3 +1,4 @@
+import { apiUrl } from "../api/api.js";
 import { useEffect, useState } from "react";
 
 import "../shared/css/styleGallery.css";
@@ -23,7 +24,7 @@ function normalizePhoto(photo) {
         category: String(photo.category ?? "").toLowerCase(),
         location: photo.location ?? "",
         author: photo.author ?? "",
-        image: photo.imageUrl ?? "",
+        image: photo.imageUrl ? apiUrl(photo.imageUrl) : "",
     };
 }
 
@@ -71,7 +72,7 @@ export default function Gallery() {
     const [reloadKey, setReloadKey] = useState(0);
 
     useEffect(() => {
-        fetch(`/Gallery/Categories`)
+        fetch(apiUrl("/Gallery/Categories"), { credentials: "include" })
             .then(async (response) => {
                 if (!response.ok) throw new Error("Could not load categories");
                 return response.json();
@@ -92,7 +93,7 @@ export default function Gallery() {
             setLoadError("");
 
             try {
-                const response = await fetch("/Gallery/AllPhotos", {
+                const response = await fetch(apiUrl("/Gallery/AllPhotos"), {
                     credentials: "include",
                     signal: controller.signal,
                 });
@@ -152,10 +153,10 @@ export default function Gallery() {
         const data = new FormData(form);
         setUploading(true);
         try {
-            const csrfResponse = await fetch(`/Gallery/Antiforgery`, { credentials: "include" });
+            const csrfResponse = await fetch(apiUrl("/Gallery/Antiforgery"), { credentials: "include" });
             if (!csrfResponse.ok) throw new Error("Could not obtain CSRF token");
             const { token } = await csrfResponse.json();
-            const response = await fetch("/Gallery/CreatePhoto", {
+            const response = await fetch(apiUrl("/Gallery/CreatePhoto"), {
                 method: "POST",
                 headers: { RequestVerificationToken: token },
                 body: data,
