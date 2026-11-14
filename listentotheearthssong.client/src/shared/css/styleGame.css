@@ -1,200 +1,257 @@
 .eco-game {
-    --game-green: #166348;
-    max-width: 1020px;
-    margin: 12px auto 45px;
-    padding: 10px 18px;
-    color: #173d32;
-    text-align: left;
+    max-width: 1160px;
+    padding: 18px 18px 42px;
+    margin: 0 auto;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: #22413e;
 }
 
-.eco-game__intro {
+.eco-game__header {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 15px;
 }
 
-.eco-game h1 {
-    font-size: clamp(1.65rem, 4vw, 2.4rem);
-    color: #174f3e;
-    margin: 6px 0 8px;
-    letter-spacing: -.03em;
+.eco-game__brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: clamp(26px,4vw,43px);
+    font-weight: 950;
+    letter-spacing: -1.8px;
+    line-height: 1.15;
+    color: #34a92c;
+    text-shadow: 0 2px 0 #fff;
 }
 
-.eco-game p {
-    color: #486357;
-    margin: 0;
+.eco-game__brand-blue {
+    color: #294375;
+}
+
+.eco-game__header p {
+    margin: 6px 0 0 3px;
+    font-size: 15px;
+    color: #527164;
 }
 
 .eco-game__score {
-    background: #e4f5db;
-    border: 2px solid #a6d295;
-    border-radius: 14px;
-    padding: 11px 15px;
-    font-size: 1rem;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 10px 8px 18px;
+    border: 3px solid #486495;
+    background: #f8fcff;
+    border-radius: 40px;
+    box-shadow: 0 4px 0 #c5dce9;
+    font-weight: 800;
+    font-size: clamp(13px,2vw,20px);
+    color: #243c6b;
 }
 
     .eco-game__score strong {
-        color: #156a3d;
+        display: block;
+        color: #fff;
+        background: #273f73;
+        border-radius: 30px;
+        font-size: clamp(18px,3vw,28px);
+        padding: 7px 19px;
+        min-width: 82px;
+        text-align: center;
     }
 
 .eco-game__board {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    aspect-ratio: 12 / 9;
     width: 100%;
-    overflow: hidden;
-    border: 8px solid #9ebc84;
-    border-radius: 18px;
-    background: #a9d68b;
-    box-shadow: 0 10px 25px #2f56301c;
-}
-
-.eco-game__tile {
     position: relative;
-    min-width: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    aspect-ratio: 1000/680;
+    background: #a3dc42;
     overflow: hidden;
+    border-radius: 23px;
+    border: 5px solid #fff;
+    box-shadow: 0 0 0 2px #d6eabb,0 12px 35px #183d3725;
+    isolation: isolate;
 }
 
-.eco-game__tile--grass {
-    background: #a9d98d;
-    box-shadow: inset 0 0 0 1px #8dbf7e27;
+.eco-game__scene {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
-.eco-game__tile--road {
-    background: #89949b;
-    box-shadow: inset 0 0 0 1px #78838a26;
+.eco-game__pin {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    filter: drop-shadow(0 3px 2px #24323b88);
+    pointer-events: none;
 }
 
-    .eco-game__tile--road::before {
-        content: "";
+.eco-game__pin-icon {
+    display: grid;
+    place-items: center;
+    background: #fa344b;
+    border: clamp(2px,.4vw,5px) solid white;
+    border-radius: 50% 50% 45% 45%;
+    color: white;
+    font-size: clamp(17px,2.9vw,35px);
+    font-weight: 900;
+    width: clamp(27px,5vw,56px);
+    aspect-ratio: 1;
+    box-shadow: 0 0 0 2px #bb2c43;
+    animation: eco-pulse 2s ease-in-out infinite;
+}
+
+    .eco-game__pin-icon::before {
+        content: ")))";
         position: absolute;
-        inset: 43% 0;
-        border-top: 2px dashed #e9e6cb9e;
-        border-bottom: 2px dashed #e9e6cb9e;
-        opacity: .65;
+        font-size: clamp(9px,1.5vw,16px);
+        letter-spacing: -2px;
+        font-weight: 900;
+        transform: translateY(-1px);
     }
 
-.eco-game__scenery {
-    font-size: clamp(19px, 4vw, 43px);
-    line-height: 1;
-    filter: drop-shadow(1px 3px 1px #48723e4f);
+.eco-game__pin-icon {
+    font-size: 0;
 }
 
-.eco-game__problem {
+.eco-game__pin-emoji {
     position: absolute;
-    z-index: 2;
-    font-size: clamp(17px, 3.5vw, 35px);
+    top: 83%;
+    font-size: clamp(15px,3vw,35px);
     line-height: 1;
-    filter: drop-shadow(0 2px 1px #26382c60);
 }
 
-.eco-game__problem--active::before {
-    content: "!";
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: #f24343;
-    color: white;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    font: 700 13px/16px sans-serif;
-    text-align: center;
+.eco-game__pin--fixed .eco-game__pin-icon {
+    background: #35b56d;
+    box-shadow: 0 0 0 2px #25834e;
+    animation: none;
+    font-size: clamp(16px,2.3vw,27px);
 }
 
-.eco-game__problem--solved {
-    opacity: .75;
-}
+    .eco-game__pin--fixed .eco-game__pin-icon::before {
+        content: none;
+    }
 
 .eco-game__player {
     position: absolute;
-    z-index: 3;
-    font-size: clamp(20px, 4vw, 43px);
+    z-index: 4;
+    transform: translate(-50%,-59%);
+    pointer-events: none;
+    transition: left .075s linear,top .075s linear;
+    font-size: clamp(25px,4.4vw,57px);
     line-height: 1;
-    transform: translateY(-10%);
-    filter: drop-shadow(0 4px 2px #0007);
+    filter: drop-shadow(0 3px 2px #1c2e4580);
 }
 
-.eco-game__bottom {
+    .eco-game__player span:first-child {
+        display: block;
+        position: relative;
+        z-index: 1;
+    }
+
+.eco-game__player-shadow {
+    display: block;
+    width: 65%;
+    height: 9px;
+    border-radius: 50%;
+    background: #26364c55;
+    margin: -1px auto 0;
+}
+
+.eco-game__toolbar {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
+    gap: 11px;
+    align-items: stretch;
     margin-top: 14px;
 }
 
-.eco-game__status {
-    flex: 1 1 280px;
-    min-height: 55px;
-    padding: 9px 14px;
-    background: #eef8e9;
-    border-radius: 10px;
+.eco-game__message {
+    flex: 1 1 285px;
+    min-height: 62px;
+    border-radius: 14px;
+    border: 2px solid #c8e3bc;
+    background: #eff9e9;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 10px 16px;
     gap: 3px;
+    font-size: 14px;
 }
 
-    .eco-game__status span {
-        font-size: .92rem;
+    .eco-game__message strong {
+        font-size: 16px;
+        color: #245844;
     }
 
-.eco-game__action, .eco-game__restart, .eco-game__dpad button {
-    border-radius: 10px;
+.eco-game__toolbar button, .eco-game__win button {
     border: 0;
-    padding: 11px 14px;
-    font-weight: 700;
+    border-radius: 13px;
     cursor: pointer;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 12px 17px;
+    transition: transform .12s,background .12s;
 }
 
-.eco-game__action {
-    background: #237b50;
+    .eco-game__toolbar button:active, .eco-game__dpad button:active {
+        transform: scale(.97);
+    }
+
+.eco-game__solve {
+    background: #23985f;
     color: white;
+    box-shadow: 0 3px 0 #16613c;
 }
 
-    .eco-game__action:disabled {
-        opacity: .45;
+    .eco-game__solve:disabled {
+        background: #9fb8a8;
+        box-shadow: none;
         cursor: not-allowed;
     }
 
-.eco-game__restart {
-    background: #e5ede4;
-    color: #275442;
+.eco-game__reset {
+    background: #e8eff7;
+    color: #315478;
 }
 
 .eco-game__controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 18px;
-    margin-top: 17px;
+    gap: 16px;
+    margin-top: 16px;
 }
 
     .eco-game__controls p {
-        font-size: .9rem;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #557264;
+        margin: 0;
     }
 
 .eco-game__dpad {
-    display: grid;
-    grid-template-columns: repeat(3, 38px);
-    grid-template-rows: repeat(2, 36px);
-    gap: 3px;
     flex: none;
+    display: grid;
+    grid-template-columns: repeat(3,43px);
+    grid-template-rows: repeat(2,40px);
+    gap: 4px;
 }
 
     .eco-game__dpad button {
-        padding: 0;
-        background: #d9ebd3;
-        color: #1b6546;
-        font-size: 23px;
+        background: #d9edce;
+        color: #246747;
+        border: 1px solid #a8d69a;
+        border-radius: 11px;
+        font-size: 26px;
+        font-weight: 800;
+        cursor: pointer;
         touch-action: manipulation;
     }
 
@@ -218,30 +275,93 @@
         grid-row: 2;
     }
 
-@media (max-width: 600px) {
+.eco-game__win {
+    position: absolute;
+    z-index: 8;
+    inset: 0;
+    background: #142d477a;
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: #204671;
+    text-align: center;
+    padding: 20px;
+}
+
+    .eco-game__win > span {
+        font-size: clamp(44px,9vw,90px);
+    }
+
+    .eco-game__win strong {
+        font-size: clamp(22px,4vw,38px);
+        background: #fff;
+        border-radius: 24px;
+        padding: 15px 25px;
+        box-shadow: 0 5px 0 #d0e5ff;
+    }
+
+    .eco-game__win p {
+        background: white;
+        padding: 10px 18px;
+        border-radius: 15px;
+        margin: 0;
+        font-size: clamp(13px,2vw,18px);
+    }
+
+    .eco-game__win button {
+        background: #23985f;
+        color: #fff;
+    }
+
+@keyframes eco-pulse {
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@media (max-width:650px) {
     .eco-game {
-        padding: 8px;
+        padding: 10px 8px 35px;
     }
 
     .eco-game__board {
-        border-width: 4px;
-        border-radius: 10px;
+        border-width: 3px;
+        border-radius: 13px;
     }
 
-    .eco-game__problem--active::before {
-        width: 14px;
-        height: 14px;
-        font-size: 10px;
-        line-height: 11px;
-        top: -8px;
-        right: -6px;
+    .eco-game__score {
+        padding: 4px 5px 4px 11px;
+        gap: 8px;
     }
+
+        .eco-game__score strong {
+            padding: 6px 12px;
+            min-width: 60px;
+        }
 
     .eco-game__controls {
         flex-direction: column;
+        align-items: center;
     }
 
         .eco-game__controls p {
             text-align: center;
         }
+
+    .eco-game__toolbar button {
+        flex: 1 1 130px;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .eco-game__pin-icon {
+        animation: none;
+    }
+
+    .eco-game__player {
+        transition: none;
+    }
 }
