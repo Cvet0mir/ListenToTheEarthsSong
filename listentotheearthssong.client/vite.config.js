@@ -41,7 +41,6 @@ const target = env.ASPNETCORE_HTTPS_PORT
         ? env.ASPNETCORE_URLS.split(';')[0]
         : 'https://localhost:7131';
 
-// https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
 
@@ -59,6 +58,16 @@ export default defineConfig({
             },
 
             '^/User': {
+                target,
+                secure: false
+            },
+
+            '^/Gallery': {
+                target,
+                secure: false
+            },
+
+            '^/uploads': {
                 target,
                 secure: false
             }

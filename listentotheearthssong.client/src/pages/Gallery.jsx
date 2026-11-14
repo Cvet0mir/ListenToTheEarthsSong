@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import "./styleGalery.css";
 
-// Change these URLs if your ASP.NET controller uses different routes.
-const PHOTOS_API = "/api/photos";
+import "../shared/css/styleGallery.css";
 
 const knownCategoryLabels = {
     noise: "🏙️ Шумни места",
@@ -17,9 +15,6 @@ const categoryLabels = {
     nature: "Природа",
 };
 
-// Expected API photo: { id, title, description, category, location,
-//   imageUrl, author }.
-// imageUrl may be an absolute URL or a path such as /uploads/photos/abc.jpg.
 function normalizePhoto(photo) {
     return {
         id: photo.id,
@@ -76,7 +71,7 @@ export default function Gallery() {
     const [reloadKey, setReloadKey] = useState(0);
 
     useEffect(() => {
-        fetch(`${PHOTOS_API}/categories`)
+        fetch(`/Gallery/Categories`)
             .then(async (response) => {
                 if (!response.ok) throw new Error("Could not load categories");
                 return response.json();
@@ -95,22 +90,40 @@ export default function Gallery() {
         async function loadPhotos() {
             setLoading(true);
             setLoadError("");
+
             try {
-                const response = await fetch(PHOTOS_API, {
+                const response = await fetch("/Gallery/AllPhotos", {
                     credentials: "include",
                     signal: controller.signal,
                 });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(
+                        `HTTP ${response.status}: ${errorText}`
+                    );
+                }
+
                 const data = await response.json();
-                if (!Array.isArray(data)) throw new Error("Expected an array of photos");
+
+                if (!Array.isArray(data)) {
+                    throw new Error("Expected an array of photos");
+                }
+
                 setPhotos(data.map(normalizePhoto));
+
             } catch (error) {
                 if (error.name !== "AbortError") {
-                    setLoadError("Снимките не могат да бъдат заредени. Опитай отново.");
                     console.error("Loading photos failed:", error);
+
+                    setLoadError(
+                        "Снимките не могат да бъдат заредени. Опитай отново."
+                    );
                 }
             } finally {
-                if (!controller.signal.aborted) setLoading(false);
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
             }
         }
         loadPhotos();
@@ -137,13 +150,12 @@ export default function Gallery() {
 
         const form = event.currentTarget;
         const data = new FormData(form);
-        // The file input is named "photo" and is included in FormData automatically.
         setUploading(true);
         try {
-            const csrfResponse = await fetch(`${PHOTOS_API}/antiforgery`, { credentials: "include" });
+            const csrfResponse = await fetch(`/Gallery/Antiforgery`, { credentials: "include" });
             if (!csrfResponse.ok) throw new Error("Could not obtain CSRF token");
             const { token } = await csrfResponse.json();
-            const response = await fetch(PHOTOS_API, {
+            const response = await fetch("/Gallery/CreatePhoto", {
                 method: "POST",
                 headers: { RequestVerificationToken: token },
                 body: data,
@@ -159,7 +171,7 @@ export default function Gallery() {
             setReloadKey((value) => value + 1);
         } catch (error) {
             console.error("Uploading photo failed:", error);
-            setUploadNotice("Качването не беше успешно. Провери дали си влязъл в профила си.");
+            setUploadNotice(error.message.substring(9, error.message.length - 1));
         } finally {
             setUploading(false);
         }

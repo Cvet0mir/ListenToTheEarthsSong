@@ -268,3 +268,18 @@ footer {
         padding-top: 38px;
     }
 }
+
+#uploadModal .modal-dialog {
+    max-height: calc(100vh - 2rem);
+}
+
+#uploadModal .modal-content {
+    max-height: calc(100vh - 2rem);
+    overflow: hidden;
+}
+
+#uploadModal .modal-body {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    min-height: 0;
+}
