@@ -269,17 +269,45 @@ footer {
     }
 }
 
-#uploadModal .modal-dialog {
+#uploadModal .upload-dialog {
+    height: calc(100vh - 2rem);
     max-height: calc(100vh - 2rem);
 }
 
-#uploadModal .modal-content {
-    max-height: calc(100vh - 2rem);
+#uploadModal .upload-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
 
-#uploadModal .modal-body {
-    overflow-y: auto;
-    overscroll-behavior: contain;
+/* Form takes remaining available space */
+#uploadModal .upload-form {
+    flex: 1 1 auto;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Actual scrollable area */
+#uploadModal .upload-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+#uploadModal .upload-footer {
+    flex-shrink: 0;
+}
+
+@media (max-width: 575.98px) {
+    #uploadModal .upload-dialog {
+        height: calc(100vh - 1rem);
+        max-height: calc(100vh - 1rem);
+        margin: 0.5rem;
+    }
 }

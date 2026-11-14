@@ -11,9 +11,9 @@ function Footer() {
             </div>
             <div>
                 <Link className="nav-link text-dark" to="/privacy">
-                    Privacy
+                    Поверителност
                 </Link>
-                Contacts:
+                Контакти:
                 <br />
                 Цветомир Смилов: +359 89 430 2833
                 <br />
