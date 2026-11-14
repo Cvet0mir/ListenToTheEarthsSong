@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import "../shared/css/styleGallery.css";
 
 const knownCategoryLabels = {
-    noise: "🏙️ Шумни места",
-    quiet: "🍃 Тихи места",
+    noisyplace: "🏙️ Шумни места",
+    quietplace: "🍃 Тихи места",
     nature: "🌳 Природа",
 };
 const labelForCategory = (value) => knownCategoryLabels[value.toLowerCase()] ?? value;
 
 const categoryLabels = {
-    noise: "Шумно място",
-    quiet: "Тихо място",
+    noisyplace: "Шумно място",
+    quietplace: "Тихо място",
     nature: "Природа",
 };
 
