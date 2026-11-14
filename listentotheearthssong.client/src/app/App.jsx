@@ -9,6 +9,7 @@ import Register from "../pages/Register";
 import Login from "../pages/LoginPage";
 import Gallery from "../pages/Gallery";
 import Game from "../pages/Game";
+import SoundWaves from "../pages/Demonstrations";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/game" element={<Game />} />
+                <Route path="/demonstrations" element={<SoundWaves />} />
             </Route>
 
         </Routes>

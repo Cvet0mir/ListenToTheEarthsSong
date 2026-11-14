@@ -281,7 +281,6 @@ footer {
     overflow: hidden;
 }
 
-/* Form takes remaining available space */
 #uploadModal .upload-form {
     flex: 1 1 auto;
     min-height: 0;
