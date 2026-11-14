@@ -8,6 +8,7 @@ import Privacy from "../pages/Privacy";
 import Register from "../pages/Register";
 import Login from "../pages/LoginPage";
 import Gallery from "../pages/Gallery";
+import Game from "../pages/Game";
 
 function App() {
     return (
