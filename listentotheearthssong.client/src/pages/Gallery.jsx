@@ -232,15 +232,17 @@ export default function Gallery() {
                     <div className="mb-3" aria-hidden="true" style={{ fontSize: "2rem" }}>📷 🌳</div>
                     <h1 className="mb-3">Светът през твоите очи</h1>
                     <p>Сподели снимки на шумни улици, тихи места и красивата природа около нас. Нека заедно открием колко ценна е тишината!</p>
-                    <button
-                        type="button"
-                        className="btn btn-upload-photo"
-                        data-bs-toggle="modal"
-                        data-bs-target="#uploadModal"
-                    >
-                        <span className="upload-plus">＋</span>
-                        Качи снимка
-                    </button>
+                    {!loadingUser && user && (
+                        <button
+                            type="button"
+                            className="btn btn-upload-photo"
+                            data-bs-toggle="modal"
+                            data-bs-target="#uploadModal"
+                        >
+                            <span className="upload-plus">＋</span>
+                            Качи снимка
+                        </button>
+                    )}
                 </div>
             </header>
 
