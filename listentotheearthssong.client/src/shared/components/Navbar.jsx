@@ -82,13 +82,12 @@ function Navbar() {
                                 </li>
                             )}
 
-                            {!loading && user && (
-                                <li className="nav-item">
-                                    <Link className="nav-link text-dark" to="/gallery">
-                                        Галерия
-                                    </Link>
-                                </li>
-                            )}
+                            
+                            <li className="nav-item">
+                                <Link className="nav-link text-dark" to="/gallery">
+                                    Галерия
+                                </Link>
+                            </li>
 
                             {!loading && user && (
                                 <li className="nav-item">
