@@ -1,7 +1,7 @@
 import { apiUrl } from "../../api/api.js";
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import useAuth from "../../app/useAuth";
 
@@ -14,6 +14,8 @@ function Navbar() {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [logoutError, setLogoutError] = useState("");
+
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
@@ -32,6 +34,8 @@ function Navbar() {
             setShowLogoutModal(false);
 
             window.dispatchEvent(new Event("auth-changed"));
+
+            navigate("/");
 
         } catch (error) {
             console.error("Logout error:", error);
