@@ -24,7 +24,7 @@ namespace ListenToTheEarthsSong.Server.Controllers
             _userService = userService;
         }
 
-        [Authorize]
+
         [HttpGet("AllPhotos")]
         public async Task<IActionResult> GetAllPhotos([FromQuery] DateTime? sortByDate)
         {
@@ -54,6 +54,7 @@ namespace ListenToTheEarthsSong.Server.Controllers
         }
 
         [Authorize]
+        [ValidateAntiForgeryToken]
         [HttpPost("CreatePhoto")]
         [RequestSizeLimit(6 * 1024 * 1024)]
         public async Task<IActionResult> CreatePhoto(

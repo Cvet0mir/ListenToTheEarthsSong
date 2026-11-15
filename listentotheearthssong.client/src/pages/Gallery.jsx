@@ -144,35 +144,74 @@ export default function Gallery() {
     async function handleUpload(event) {
         event.preventDefault();
         setUploadNotice("");
-        if (!photoFile || !["image/jpeg", "image/png", "image/webp"].includes(photoFile.type)) {
+
+        if (!photoFile ||
+            !["image/jpeg", "image/png", "image/webp"].includes(photoFile.type)) {
             setUploadNotice("Избери JPG, PNG или WebP снимка.");
+            return;
+        }
+
+        if (photoFile.size > 5 * 1024 * 1024) {
+            setUploadNotice("Снимката не трябва да надвишава 5 MB.");
             return;
         }
 
         const form = event.currentTarget;
         const data = new FormData(form);
+
         setUploading(true);
+
         try {
-            const csrfResponse = await fetch(apiUrl("/Gallery/Antiforgery"), { credentials: "include" });
-            if (!csrfResponse.ok) throw new Error("Could not obtain CSRF token");
+            const csrfResponse = await fetch(
+                apiUrl("/Gallery/Antiforgery"),
+                {
+                    credentials: "include"
+                }
+            );
+
+            if (!csrfResponse.ok) {
+                throw new Error(
+                    `Неуспешно получаване на защитен токен (${csrfResponse.status}).`
+                );
+            }
+
             const { token } = await csrfResponse.json();
-            const response = await fetch(apiUrl("/Gallery/CreatePhoto"), {
-                method: "POST",
-                headers: { RequestVerificationToken: token },
-                body: data,
-                credentials: "include",
-            });
+
+            if (!token) {
+                throw new Error("Сървърът не върна защитен токен.");
+            }
+
+            const response = await fetch(
+                apiUrl("/Gallery/CreatePhoto"),
+                {
+                    method: "POST",
+                    headers: {
+                        RequestVerificationToken: token
+                    },
+                    body: data,
+                    credentials: "include"
+                }
+            );
+
             if (!response.ok) {
                 const detail = await response.text();
                 throw new Error(`HTTP ${response.status}: ${detail}`);
             }
+
             setUploadNotice("Снимката е публикувана успешно!");
+
             form.reset();
             setPhotoFile(null);
-            setReloadKey((value) => value + 1);
+            setReloadKey(value => value + 1);
+
         } catch (error) {
             console.error("Uploading photo failed:", error);
-            setUploadNotice(error.message.substring(9, error.message.length - 1));
+
+            setUploadNotice(
+                error instanceof Error
+                    ? error.message
+                    : "Възникна грешка при качването на снимката."
+            );
         } finally {
             setUploading(false);
         }

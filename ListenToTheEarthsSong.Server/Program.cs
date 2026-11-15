@@ -4,6 +4,8 @@ using ListenToTheEarthsSong.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
 
 namespace ListenToTheEarthsSong.Server
 {
@@ -77,7 +79,19 @@ namespace ListenToTheEarthsSong.Server
 
             builder.Services.AddAuthorization();
 
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor |
+                    ForwardedHeaders.XForwardedProto;
+
+                // Replace with your verified Render proxy IPs or networks.
+                // options.KnownProxies.Add(IPAddress.Parse("..."));
+            });
+
             var app = builder.Build();
+
+            app.UseForwardedHeaders();
 
             if (app.Environment.IsDevelopment())
             {
