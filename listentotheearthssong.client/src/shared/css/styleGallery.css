@@ -255,6 +255,60 @@ footer {
     padding: 25px 0;
 }
 
+
+/* Gallery upload button */
+
+.btn-upload-photo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #b8e4bf, #8dd5a4);
+    color: #164b3c;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+    /* Hover effect */
+    .btn-upload-photo:hover {
+        background: linear-gradient(135deg, #d4f5d8, #a5e8b8);
+        color: #123e32;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Click effect */
+    .btn-upload-photo:active {
+        transform: translateY(0) scale(0.97);
+    }
+
+    /* Keyboard accessibility */
+    .btn-upload-photo:focus-visible {
+        outline: 3px solid #ffffff;
+        outline-offset: 4px;
+    }
+
+/* Plus icon */
+.upload-plus {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .btn-upload-photo {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+}
+
     footer a {
         color: #c7edd2;
     }
