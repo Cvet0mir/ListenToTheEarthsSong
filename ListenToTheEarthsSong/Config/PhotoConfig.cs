@@ -13,7 +13,36 @@ namespace ListenToTheEarthsSong.Data.Config
     {
         public void Configure(EntityTypeBuilder<Photo> builder)
         {
-            //To be implemented if needed for future configurations
+            builder.HasData(new Photo
+            {
+                Id = 1,
+                ImgName = "Улица в Ню Йорк",
+                ImgUrl = "../ListenToTheEarthsSong.Server/Img/NewYorkStreet.jpg",
+                Description = "Снимка на улица в Ню Йорк, САЩ.",
+                UploadedAt = DateTime.Now,
+                Category = Data.Enums.PhotoCategory.NoisyPlace,
+                UploadedById = 1
+            },
+            new Photo
+            {
+                Id = 2,
+                ImgName = "Езеро",
+                ImgUrl = "../ListenToTheEarthsSong.Server/Img/Lake.jpg",
+                Description = "Снимка на улица в езеро.",
+                UploadedAt = DateTime.Now,
+                Category = Data.Enums.PhotoCategory.QuietPlace,
+                UploadedById = 1
+            },
+            new Photo
+            {
+                Id = 3,
+                ImgName = "Тиха гора",
+                ImgUrl = "../ListenToTheEarthsSong.Server/Img/Forest.jpg",
+                Description = "Снимка на гора.",
+                UploadedAt = DateTime.Now,
+                Category = Data.Enums.PhotoCategory.Nature,
+                UploadedById = 2
+            });
         }
     }
 }
