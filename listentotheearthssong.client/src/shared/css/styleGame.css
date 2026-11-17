@@ -1,0 +1,534 @@
+.eco-game {
+    max-width: 1160px;
+    padding: 18px 18px 42px;
+    margin: 0 auto;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: #22413e;
+}
+
+.eco-game__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 15px;
+}
+
+.eco-game__brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: clamp(26px,4vw,43px);
+    font-weight: 950;
+    letter-spacing: -1.8px;
+    line-height: 1.15;
+    color: #34a92c;
+    text-shadow: 0 2px 0 #fff;
+}
+
+.eco-game__brand-blue {
+    color: #294375;
+}
+
+.eco-game__header p {
+    margin: 6px 0 0 3px;
+    font-size: 15px;
+    color: #527164;
+}
+
+.eco-game__score {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 10px 8px 18px;
+    border: 3px solid #486495;
+    background: #f8fcff;
+    border-radius: 40px;
+    box-shadow: 0 4px 0 #c5dce9;
+    font-weight: 800;
+    font-size: clamp(13px,2vw,20px);
+    color: #243c6b;
+}
+
+    .eco-game__score strong {
+        display: block;
+        color: #fff;
+        background: #273f73;
+        border-radius: 30px;
+        font-size: clamp(18px,3vw,28px);
+        padding: 7px 19px;
+        min-width: 82px;
+        text-align: center;
+    }
+
+.eco-game__board {
+    width: 100%;
+    position: relative;
+    aspect-ratio: 1000/680;
+    background: #a3dc42;
+    overflow: hidden;
+    border-radius: 23px;
+    border: 5px solid #fff;
+    box-shadow: 0 0 0 2px #d6eabb,0 12px 35px #183d3725;
+    isolation: isolate;
+}
+
+.eco-game__scene {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.eco-game__pin {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    filter: drop-shadow(0 3px 2px #24323b88);
+    pointer-events: none;
+}
+
+.eco-game__pin-icon {
+    display: grid;
+    place-items: center;
+    background: #fa344b;
+    border: clamp(2px,.4vw,5px) solid white;
+    border-radius: 50% 50% 45% 45%;
+    color: white;
+    font-size: clamp(17px,2.9vw,35px);
+    font-weight: 900;
+    width: clamp(27px,5vw,56px);
+    aspect-ratio: 1;
+    box-shadow: 0 0 0 2px #bb2c43;
+    animation: eco-pulse 2s ease-in-out infinite;
+}
+
+    .eco-game__pin-icon::before {
+        content: ")))";
+        position: absolute;
+        font-size: clamp(9px,1.5vw,16px);
+        letter-spacing: -2px;
+        font-weight: 900;
+        transform: translateY(-1px);
+    }
+
+.eco-game__pin-icon {
+    font-size: 0;
+}
+
+.eco-game__pin-emoji {
+    position: absolute;
+    top: 83%;
+    font-size: clamp(15px,3vw,35px);
+    line-height: 1;
+}
+
+.eco-game__pin--fixed .eco-game__pin-icon {
+    background: #35b56d;
+    box-shadow: 0 0 0 2px #25834e;
+    animation: none;
+    font-size: clamp(16px,2.3vw,27px);
+}
+
+    .eco-game__pin--fixed .eco-game__pin-icon::before {
+        content: none;
+    }
+
+.eco-game__player {
+    position: absolute;
+    z-index: 4;
+    transform: translate(-50%,-59%);
+    pointer-events: none;
+    transition: left .075s linear,top .075s linear;
+    font-size: clamp(25px,4.4vw,57px);
+    line-height: 1;
+    filter: drop-shadow(0 3px 2px #1c2e4580);
+}
+
+    .eco-game__player span:first-child {
+        display: block;
+        position: relative;
+        z-index: 1;
+    }
+
+.eco-game__player-shadow {
+    display: block;
+    width: 65%;
+    height: 9px;
+    border-radius: 50%;
+    background: #26364c55;
+    margin: -1px auto 0;
+}
+
+.eco-game__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 11px;
+    align-items: stretch;
+    margin-top: 14px;
+}
+
+.eco-game__message {
+    flex: 1 1 285px;
+    min-height: 62px;
+    border-radius: 14px;
+    border: 2px solid #c8e3bc;
+    background: #eff9e9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 16px;
+    gap: 3px;
+    font-size: 14px;
+}
+
+    .eco-game__message strong {
+        font-size: 16px;
+        color: #245844;
+    }
+
+.eco-game__toolbar button, .eco-game__win button {
+    border: 0;
+    border-radius: 13px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 12px 17px;
+    transition: transform .12s,background .12s;
+}
+
+    .eco-game__toolbar button:active, .eco-game__dpad button:active {
+        transform: scale(.97);
+    }
+
+.eco-game__solve {
+    background: #23985f;
+    color: white;
+    box-shadow: 0 3px 0 #16613c;
+}
+
+    .eco-game__solve:disabled {
+        background: #9fb8a8;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+.eco-game__reset {
+    background: #e8eff7;
+    color: #315478;
+}
+
+.eco-game__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+    .eco-game__controls p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #557264;
+        margin: 0;
+    }
+
+.eco-game__dpad {
+    flex: none;
+    display: grid;
+    grid-template-columns: repeat(3,43px);
+    grid-template-rows: repeat(2,40px);
+    gap: 4px;
+}
+
+    .eco-game__dpad button {
+        background: #d9edce;
+        color: #246747;
+        border: 1px solid #a8d69a;
+        border-radius: 11px;
+        font-size: 26px;
+        font-weight: 800;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    .eco-game__dpad .up {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .eco-game__dpad .left {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .eco-game__dpad .down {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .eco-game__dpad .right {
+        grid-column: 3;
+        grid-row: 2;
+    }
+
+.eco-game__win {
+    position: absolute;
+    z-index: 8;
+    inset: 0;
+    background: #142d477a;
+    backdrop-filter: blur(3px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: #204671;
+    text-align: center;
+    padding: 20px;
+}
+
+    .eco-game__win > span {
+        font-size: clamp(44px,9vw,90px);
+    }
+
+    .eco-game__win strong {
+        font-size: clamp(22px,4vw,38px);
+        background: #fff;
+        border-radius: 24px;
+        padding: 15px 25px;
+        box-shadow: 0 5px 0 #d0e5ff;
+    }
+
+    .eco-game__win p {
+        background: white;
+        padding: 10px 18px;
+        border-radius: 15px;
+        margin: 0;
+        font-size: clamp(13px,2vw,18px);
+    }
+
+    .eco-game__win button {
+        background: #23985f;
+        color: #fff;
+    }
+
+@keyframes eco-pulse {
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@media (max-width:650px) {
+    .eco-game {
+        padding: 10px 8px 35px;
+    }
+
+    .eco-game__board {
+        border-width: 3px;
+        border-radius: 13px;
+    }
+
+    .eco-game__score {
+        padding: 4px 5px 4px 11px;
+        gap: 8px;
+    }
+
+        .eco-game__score strong {
+            padding: 6px 12px;
+            min-width: 60px;
+        }
+
+    .eco-game__controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .eco-game__controls p {
+            text-align: center;
+        }
+
+    .eco-game__toolbar button {
+        flex: 1 1 130px;
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .eco-game__pin-icon {
+        animation: none;
+    }
+
+    .eco-game__player {
+        transition: none;
+    }
+}
+
+/* V3: clear, always-visible progress meter */
+.eco-game__score {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: min(100%,330px);
+    padding: 12px 16px;
+    border-radius: 22px;
+}
+
+.eco-game__score-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(13px,1.7vw,17px);
+}
+
+    .eco-game__score-top strong {
+        min-width: 65px;
+        padding: 3px 11px;
+        font-size: 20px;
+    }
+
+.eco-game__meter {
+    position: relative;
+    height: 15px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: #dbe5e9;
+    border: 2px solid #b2cbd8;
+    box-shadow: inset 0 2px 3px #536b7a25;
+}
+
+.eco-game__meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg,#48d283,#20a966);
+    border-radius: inherit;
+    transition: width .4s ease;
+}
+
+.eco-game__score small {
+    font-size: 12px;
+    font-weight: 700;
+    color: #536f7b;
+}
+/* V3: original illustrated child, not a platform-dependent emoji */
+.eco-game__player {
+    width: clamp(32px,5.5vw,66px);
+    font-size: initial;
+    transform: translate(-50%,-88%);
+    transition: left 42ms linear,top 42ms linear;
+    filter: drop-shadow(0 3px 2px #152b3775);
+}
+
+.eco-game__player-facing {
+    width: 100%;
+    transform-origin: center;
+    transition: transform .12s ease;
+}
+
+.eco-game__player-facing--left {
+    transform: scaleX(-1);
+}
+
+.eco-game__character {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.eco-game__character--walking .eco-game__character-legs {
+    transform-origin: 37px 74px;
+    animation: eco-character-step .24s ease-in-out infinite alternate;
+}
+
+@keyframes eco-character-step {
+    to {
+        transform: rotate(-9deg);
+    }
+}
+
+.eco-game__board {
+    background: #a9df55;
+    box-shadow: 0 0 0 2px #d6eabb,0 16px 36px #183d3733;
+}
+
+.eco-game__pin-icon {
+    box-shadow: 0 2px 7px #bc2c43aa;
+}
+
+.eco-game__message {
+    background: linear-gradient(115deg,#f3fff0,#e7f5eb);
+}
+
+@media(max-width:650px) {
+    .eco-game__score {
+        width: 100%;
+    }
+
+    .eco-game__header {
+        align-items: stretch;
+    }
+
+    .eco-game__player {
+        width: clamp(22px,6vw,36px);
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .eco-game__meter-fill, .eco-game__player-facing {
+        transition: none;
+    }
+
+    .eco-game__character--walking .eco-game__character-legs {
+        animation: none;
+    }
+}
+
+/* V4: position updates now come directly from the animation frame.
+   A second CSS position transition caused visible skipping and delayed stops. */
+.eco-game__player {
+    transition: none;
+    will-change: left, top;
+}
+
+.eco-game__dpad button {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+    .eco-game__dpad button:active {
+        background: #9fe0a0;
+        box-shadow: inset 0 2px 5px #437d5060;
+    }
+
+.eco-game__pin {
+    filter: drop-shadow(0 3px 3px #24323b66);
+}
+
+.eco-game__board {
+    border-color: #f7ffdf;
+}
+
+.eco-game__character--walking {
+    animation: eco-walk-bob .28s ease-in-out infinite alternate;
+}
+
+@keyframes eco-walk-bob {
+    from {
+        translate: 0 0;
+    }
+
+    to {
+        translate: 0 -2px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .eco-game__character--walking {
+        animation: none;
+    }
+}

@@ -1,0 +1,143 @@
+
+.soundwaves-section {
+    padding: 55px 0 85px;
+}
+
+.recording-card {
+    border: 1px solid #e0eae2;
+    background: white;
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(24,63,45,.055);
+    height: 100%;
+    transition: transform .2s, box-shadow .2s;
+}
+
+    .recording-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(24,63,45,.12);
+    }
+
+.recording-card-body {
+    padding: 22px;
+}
+
+.recording-card .card-title {
+    font-size: 1.12rem;
+    font-weight: 750;
+    color: var(--forest);
+}
+
+.recording-card .card-description {
+    color: #566b5f;
+    font-size: .91rem;
+    min-height: 2.7em;
+}
+
+.recording-card .category-badge {
+    display: inline-block;
+    border-radius: 50rem;
+    padding: 5px 11px;
+    font-size: .74rem;
+    font-weight: 700;
+    background: #e8f4ed;
+    color: #17694c;
+}
+
+    .recording-card .category-badge.noise {
+        background: #fff0e4;
+        color: #98551f;
+    }
+
+    .recording-card .category-badge.nature {
+        background: #eaf2fc;
+        color: #326a9e;
+    }
+
+    .recording-card .category-badge.quiet {
+        background: #e8f4ed;
+        color: #17694c;
+    }
+
+.waveform-player {
+    background: #f3f9f4;
+    border: 1px solid #e2eee5;
+    border-radius: 13px;
+    padding: 12px 13px;
+    margin-top: 20px;
+}
+
+.waveform-container {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+    .waveform-container wave {
+        overflow: hidden !important;
+    }
+
+.waveform-controls {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-top: 9px;
+}
+
+.wave-play-button {
+    width: 39px;
+    height: 39px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--forest);
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+
+    .wave-play-button:hover {
+        background: var(--green);
+        transform: scale(1.06);
+    }
+
+.wave-time {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: #678075;
+    font-size: .78rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.audio-error {
+    color: #a33b35;
+    font-size: .85rem;
+    margin: 10px 0 0;
+}
+
+.recording-meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid #eff2ed;
+    padding-top: 13px;
+    margin-top: 17px;
+    color: #678075;
+    font-size: .84rem;
+}
+
+@media (max-width: 575.98px) {
+    .soundwaves-section {
+        padding-top: 38px;
+    }
+
+    .recording-card-body {
+        padding: 18px;
+    }
+}

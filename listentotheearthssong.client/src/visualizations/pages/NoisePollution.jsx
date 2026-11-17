@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import NoiseMap from "../components/NoiseMap";
+import "../../shared/css/noiseMap.css";
 
 function NoisePollution() {
     const [selectedYear, setSelectedYear] = useState("2017");
@@ -34,41 +35,45 @@ function NoisePollution() {
     }, []);
 
     return (
-        <div className="container mt-4">
-            <h1>Noise Pollution in Sofia</h1>
+        <>
+            {/*
+            <div className="container mt-4">
+                <h1>Noise Pollution in Sofia</h1>
 
-            <p>
-                Explore noise measurements across different
-                locations in Sofia.
-            </p>
-
-            <div className="mb-3">
-                <label htmlFor="year" className="form-label">
-                    Select measurement year:
-                </label>
-
-                <select
-                    id="year"
-                    className="form-select"
-                    value={selectedYear}
-                    onChange={e => setSelectedYear(e.target.value)}
-                    style={{ maxWidth: "200px" }}
-                >
-                    {years.map(year => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {loading && <p>Loading map data...</p>}
-
-            {error && (
-                <p className="text-danger">
-                    {error}
+                <p>
+                    Explore noise measurements across different
+                    locations in Sofia.
                 </p>
-            )}
+
+                <div className="mb-3">
+                    <label htmlFor="year" className="form-label">
+                        Select measurement year:
+                    </label>
+
+                    <select
+                        id="year"
+                        className="form-select"
+                        value={selectedYear}
+                        onChange={e => setSelectedYear(e.target.value)}
+                        style={{ maxWidth: "200px" }}
+                    >
+                        {years.map(year => (
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {loading && <p>Loading map data...</p>}
+
+                {error && (
+                    <p className="text-danger">
+                        {error}
+                    </p>
+                )}
+            </div>
+            */}
 
             {noiseData && (
                 <div className="noise-map-wrapper">
@@ -78,7 +83,7 @@ function NoisePollution() {
                     />
                 </div>
             )}
-        </div>
+        </>
     );
 }
 

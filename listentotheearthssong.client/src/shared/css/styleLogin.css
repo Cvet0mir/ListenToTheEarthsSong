@@ -1,0 +1,347 @@
+:root {
+    --forest: #123e32;
+    --forest-2: #1e6952;
+    --mint: #bce5c7;
+    --paper: #f4f8f4;
+    --ink: #1e372f;
+    --muted: #63766d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.site-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    padding: 23px clamp(22px, 5vw, 80px);
+}
+
+.brand {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    font-size: 1.2rem;
+}
+
+    .brand:hover {
+        color: var(--mint);
+    }
+
+    .brand svg {
+        width: 30px;
+        height: 30px;
+    }
+
+.login-layout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(390px, .95fr);
+}
+
+.story-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 125px clamp(36px, 8vw, 115px) 75px;
+    color: white;
+    background: radial-gradient(ellipse at 20% 0%, #2e8365 0%, transparent 54%), linear-gradient(145deg, #174c3b, #0c2f28);
+}
+
+    .story-panel::after {
+        content: "";
+        position: absolute;
+        bottom: -210px;
+        left: -160px;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        border: 1px solid rgba(207,246,216,.16);
+        box-shadow: 0 0 0 65px rgba(207,246,216,.035), 0 0 0 125px rgba(207,246,216,.03);
+        z-index: -1;
+    }
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: max-content;
+    padding: 8px 13px;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 100px;
+    color: #d5f3df;
+    font-size: .79rem;
+    font-weight: 650;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+    .eyebrow span {
+        width: 7px;
+        height: 7px;
+        background: var(--mint);
+        border-radius: 50%;
+    }
+
+.story-title {
+    font-size: clamp(2.8rem, 5.5vw, 5.4rem);
+    line-height: 1.07;
+    letter-spacing: -.065em;
+    font-weight: 800;
+    max-width: 680px;
+    margin: 26px 0;
+}
+
+    .story-title em {
+        color: #bbe7c6;
+        font-style: normal;
+    }
+
+.story-copy {
+    color: #d0e5da;
+    font-size: 1.06rem;
+    max-width: 480px;
+    line-height: 1.8;
+}
+
+.waves {
+    width: min(100%, 580px);
+    margin: 50px 0 25px;
+    opacity: .85;
+}
+
+.story-foot {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: #b8d8c8;
+    font-size: .89rem;
+}
+
+    .story-foot svg {
+        flex: none;
+    }
+
+.form-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 110px 28px 55px;
+    background: linear-gradient(170deg, #fafcf9, #eef5ef);
+}
+
+.form-wrap {
+    width: 100%;
+    max-width: 435px;
+}
+
+.overline {
+    color: #248364;
+    font-size: .76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+}
+
+.form-wrap h1 {
+    margin: 13px 0 10px;
+    font-size: clamp(2.05rem, 3.2vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -.055em;
+    color: #183b30;
+}
+
+.lead-copy {
+    color: var(--muted);
+    font-size: .96rem;
+    margin: 0 0 31px;
+}
+
+.field-label {
+    display: inline-block;
+    font-size: .89rem;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.field {
+    position: relative;
+}
+
+.field-icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #789085;
+    pointer-events: none;
+}
+
+.form-control {
+    border-radius: 13px;
+    padding: 15px 16px 15px 49px;
+    background: white;
+    border: 1px solid #d8e4da;
+    color: #233f34;
+    font-size: .95rem;
+    min-height: 54px;
+    box-shadow: 0 3px 10px rgba(29,78,54,.025);
+}
+
+    .form-control:focus {
+        border-color: #408c6c;
+        box-shadow: 0 0 0 .22rem rgba(64,140,108,.13);
+    }
+
+    .form-control::placeholder {
+        color: #9aa9a0;
+    }
+
+.field-password .form-control {
+    padding-right: 53px;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 11px;
+    transform: translateY(-50%);
+    border: 0;
+    background: none;
+    border-radius: 8px;
+    padding: 8px;
+    color: #547263;
+}
+
+    .toggle-password:hover {
+        background: #ebf5ee;
+    }
+
+    .toggle-password:focus-visible {
+        outline: 2px solid #408c6c;
+        outline-offset: 2px;
+    }
+
+.submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    border: 0;
+    border-radius: 13px;
+    padding: 15px 18px;
+    margin-top: 30px;
+    font-size: 1rem;
+    font-weight: 750;
+    background: var(--forest-2);
+    color: white;
+    transition: transform .2s, background .2s, box-shadow .2s;
+    box-shadow: 0 10px 20px rgba(23,99,68,.15);
+}
+
+    .submit-btn:hover {
+        background: #145039;
+        transform: translateY(-2px);
+        box-shadow: 0 13px 24px rgba(23,99,68,.2);
+    }
+
+.register-copy {
+    text-align: center;
+    font-size: .9rem;
+    color: #6c8175;
+    margin: 24px 0 0;
+}
+
+    .register-copy a, .privacy-copy a {
+        color: #1c7455;
+        font-weight: 750;
+        text-decoration: none;
+    }
+
+        .register-copy a:hover, .privacy-copy a:hover {
+            text-decoration: underline;
+        }
+
+.privacy-copy {
+    font-size: .78rem;
+    line-height: 1.7;
+    color: #7a8e81;
+    text-align: center;
+    margin-top: 27px;
+}
+
+.mobile-brand {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .login-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .site-nav {
+        display: none;
+    }
+
+    .story-panel {
+        min-height: 245px;
+        padding: 55px 28px 45px;
+    }
+
+    .story-title {
+        font-size: 2.4rem;
+        max-width: 540px;
+        margin: 14px 0;
+    }
+
+    .story-copy {
+        font-size: .92rem;
+        margin-bottom: 0;
+    }
+
+    .waves, .story-foot, .eyebrow {
+        display: none;
+    }
+
+    .form-panel {
+        padding: 45px 25px 65px;
+    }
+
+    .mobile-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 800;
+        color: #1b654c;
+        text-decoration: none;
+        margin-bottom: 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

@@ -1,4 +1,4 @@
-
+﻿
 import { useMemo } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import L from "leaflet";
@@ -77,14 +77,14 @@ function NoiseMap({ noiseData, year }) {
 
         const noise = document.createElement("p");
         noise.textContent = noiseLevel === null
-            ? `Noise level (${year}): No data`
-            : `Noise level (${year}): ${noiseLevel} dB`;
+            ? `Ниво на шума (${year}): Няма данни`
+            : `Ниво на шума (${year}): ${noiseLevel} dB`;
 
         const limit = document.createElement("p");
-        limit.textContent = `Permitted limit: ${norma} dB`;
+        limit.textContent = `Позволена граница: ${norma} dB`;
 
         const territory = document.createElement("p");
-        territory.textContent = `Territory type: ${properties.tip_teritoria}`;
+        territory.textContent = `Тип на района: ${properties.tip_teritoria}`;
 
         popup.appendChild(title);
         popup.appendChild(noise);

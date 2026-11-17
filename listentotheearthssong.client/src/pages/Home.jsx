@@ -1,10 +1,18 @@
 
+import React, { useEffect } from "react";
+
 import NoiseChart from "../visualizations/pages/NoiseChart";
 import NoisePollution from "../visualizations/pages/NoisePollution";
 
-import ".././shared/css/styleHome.css";
+import "../shared/css/styleHome.css";
 
 function Home() {
+
+    useEffect(() => {
+        window.scrollTo(0, 0),
+            []
+    })
+
     return (
         <>
             {/* Hero */}
@@ -267,8 +275,7 @@ function Home() {
                                         </h4>
 
                                         <p>
-                                            Избери година от менюто,
-                                            след което приближавай
+                                            Приближавай
                                             и премествай картата,
                                             за да разглеждаш различни
                                             райони.
@@ -287,7 +294,6 @@ function Home() {
                                     <NoisePollution />
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </section>
