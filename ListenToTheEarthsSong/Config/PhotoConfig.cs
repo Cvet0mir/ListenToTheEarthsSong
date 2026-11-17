@@ -17,7 +17,7 @@ namespace ListenToTheEarthsSong.Data.Config
             {
                 Id = 1,
                 ImgName = "Улица в Ню Йорк",
-                ImgUrl = "../ListenToTheEarthsSong.Server/Img/NewYorkStreet.jpg",
+                ImgUrl = "C:\\Users\\11B_18\\source\\repos\\Cvet0mir\\ListenToTheEarthsSong\\ListenToTheEarthsSong.Server\\Img\\NewYorkStreet.jpg",
                 Description = "Снимка на улица в Ню Йорк, САЩ.",
                 UploadedAt = DateTime.Now,
                 Category = Data.Enums.PhotoCategory.NoisyPlace,
@@ -27,7 +27,7 @@ namespace ListenToTheEarthsSong.Data.Config
             {
                 Id = 2,
                 ImgName = "Езеро",
-                ImgUrl = "../ListenToTheEarthsSong.Server/Img/Lake.jpg",
+                ImgUrl = "C:\\Users\\11B_18\\source\\repos\\Cvet0mir\\ListenToTheEarthsSong\\ListenToTheEarthsSong.Server\\Img\\Lake.jpg",
                 Description = "Снимка на улица в езеро.",
                 UploadedAt = DateTime.Now,
                 Category = Data.Enums.PhotoCategory.QuietPlace,
@@ -37,7 +37,7 @@ namespace ListenToTheEarthsSong.Data.Config
             {
                 Id = 3,
                 ImgName = "Тиха гора",
-                ImgUrl = "../ListenToTheEarthsSong.Server/Img/Forest.jpg",
+                ImgUrl = "C:\\Users\\11B_18\\source\\repos\\Cvet0mir\\ListenToTheEarthsSong\\ListenToTheEarthsSong.Server\\Img\\Forest.jpg",
                 Description = "Снимка на гора.",
                 UploadedAt = DateTime.Now,
                 Category = Data.Enums.PhotoCategory.Nature,
